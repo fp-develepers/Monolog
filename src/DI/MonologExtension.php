@@ -48,14 +48,18 @@ class MonologExtension extends \Nette\DI\CompilerExtension
 		'hookToTracy' => TRUE,
 		'tracyBaseUrl' => NULL,
 		'usePriorityProcessor' => TRUE,
-		// 'registerFallback' => TRUE,
+		'registerFallback' => FALSE,
 	];
 
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();
 
-		$config = $this->getConfig($this->defaults);
+		if (!empty($this->defaults)) {
+            $this->validateConfig($this->defaults);
+        }
+
+		$config = $this->config;
 		$config['logDir'] = self::resolveLogDir($builder->parameters);
 		self::createDirectory($config['logDir']);
 		$this->setConfig($config);
@@ -69,11 +73,11 @@ class MonologExtension extends \Nette\DI\CompilerExtension
 		}
 
 		$builder->addDefinition($this->prefix('logger'))
-			->setClass(KdybyLogger::class, [$config['name']]);
+			->setFactory(KdybyLogger::class, [$config['name']]);
 
 		// Tracy adapter
 		$builder->addDefinition($this->prefix('adapter'))
-			->setClass(MonologAdapter::class, [
+			->setFactory(MonologAdapter::class, [
 				'monolog' => $this->prefix('@logger'),
 				'blueScreenRenderer' => $this->prefix('@blueScreenRenderer'),
 				'email' => Debugger::$email,
@@ -82,7 +86,7 @@ class MonologExtension extends \Nette\DI\CompilerExtension
 
 		// The renderer has to be separate, to solve circural service dependencies
 		$builder->addDefinition($this->prefix('blueScreenRenderer'))
-			->setClass(BlueScreenRenderer::class, [
+			->setFactory(BlueScreenRenderer::class, [
 				'directory' => $config['logDir'],
 			])
 			->setAutowired(FALSE)
@@ -126,7 +130,7 @@ class MonologExtension extends \Nette\DI\CompilerExtension
 		}
 
 		$builder->addDefinition($this->prefix('processor.tracyException'))
-			->setClass(TracyExceptionProcessor::class, [
+			->setFactory(TracyExceptionProcessor::class, [
 				'blueScreenRenderer' => $this->prefix('@blueScreenRenderer'),
 			])
 			->addTag(self::TAG_PROCESSOR)
@@ -134,7 +138,7 @@ class MonologExtension extends \Nette\DI\CompilerExtension
 
 		if ($config['tracyBaseUrl'] !== NULL) {
 			$builder->addDefinition($this->prefix('processor.tracyBaseUrl'))
-				->setClass(TracyUrlProcessor::class, [
+				->setFactory(TracyUrlProcessor::class, [
 					'baseUrl' => $config['tracyBaseUrl'],
 					'blueScreenRenderer' => $this->prefix('@blueScreenRenderer'),
 				])
