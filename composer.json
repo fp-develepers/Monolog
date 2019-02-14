@@ -20,7 +20,7 @@
 	"require": {
 		"php": "^5.6 || ^7.0",
 		"nette/di": "*",
-		"kdyby/strict-objects": "^1.0",
+		"kdyby/strict-objects": "dev-master#10d99b6",
 		"monolog/monolog": "^1.10",
 		"tracy/tracy": "*"
 	},
