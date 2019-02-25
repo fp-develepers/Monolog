@@ -65,7 +65,7 @@ class MonologAdapter extends \Tracy\Logger
 		return $this->blueScreenRenderer->getExceptionFile($exception);
 	}
 
-	public function log($originalMessage, $priority = self::INFO)
+	public function log($originalMessage, $priority = self::INFO): ?string
 	{
 		$message = $this->formatMessage($originalMessage);
 		$context = [
