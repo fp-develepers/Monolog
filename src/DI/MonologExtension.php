@@ -107,7 +107,7 @@ class MonologExtension extends \Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		foreach ($config['handlers'] as $handlerName => $implementation) {
-            $this->compiler->loadDefinitions([
+            $this->compiler->loadDefinitionsFromConfig([
 				$serviceName = $this->prefix('handler.' . $handlerName) => $implementation,
 			]);
 
@@ -147,7 +147,7 @@ class MonologExtension extends \Nette\DI\CompilerExtension
 		}
 
 		foreach ($config['processors'] as $processorName => $implementation) {
-			$this->compiler->loadDefinitions([
+			$this->compiler->loadDefinitionsFromConfig([
 				$serviceName = $this->prefix('processor.' . $processorName) => $implementation,
 			]);
 
