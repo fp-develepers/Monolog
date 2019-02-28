@@ -29,5 +29,34 @@
 		"nette/bootstrap": "*",
 		"nette/http": "*",
 		"nette/tester": "*"
+	},
+	"minimum-stability": "dev",
+	"support": {
+		"email": "filip@prochazka.su",
+		"issues": "https://github.com/kdyby/monolog/issues"
+	},
+	"autoload": {
+		"psr-4": {
+			"Kdyby\\Monolog\\": "src/"
+		},
+		"classmap": [
+			"src/exceptions.php"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"KdybyTests\\": "tests/KdybyTests/"
+		},
+		"classmap": [
+			"tests/KdybyTests"
+		]
+	},
+	"provide": {
+		"psr/log-implementation": "1.0.0"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "master"
+		}
 	}
 }
